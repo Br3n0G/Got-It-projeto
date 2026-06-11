@@ -20,6 +20,12 @@ import { LoginAdmin } from "./pages/LoginAdmin";
 import { AdminDashboard } from "./pages/admin/AdminDashboard.tsx";
 import { AdminClientes } from "./pages/admin/AdminClientes.tsx";
 import { AdminEspecialistas } from "./pages/admin/AdminEspecialistas.tsx";
+import { AdminContratos } from "./pages/admin/AdminContratos.tsx";
+import { AdminPagamentos } from "./pages/admin/AdminPagamentos.tsx";
+import { AdminAccountNotifications } from "./pages/admin/AdminAccountNotifications.tsx";
+import { AdminPerfilDados } from "./pages/admin/AdminPerfilDados.tsx";
+import { AdminSegurancaConta } from "./pages/admin/AdminSegurancaConta.tsx";
+import { AdminSuporte } from "./pages/admin/AdminSuporte.tsx";
 
 export default function App() {
   return (
@@ -50,6 +56,12 @@ export default function App() {
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/clientes" element={<AdminClientes />} />
       <Route path="/admin/especialistas" element={<AdminEspecialistas />} />
+      <Route path="/admin/contratos" element={<AdminContratos />} />
+      <Route path="/admin/pagamentos" element={<AdminPagamentos />} />
+      <Route path="/admin/perfil" element={<AdminPerfilDados />} />
+      <Route path="/admin/perfil/seguranca" element={<AdminSegurancaConta />} />
+      <Route path="/admin/perfil/notificacoes" element={<AdminAccountNotifications />} />
+      <Route path="/admin/suporte" element={<AdminSuporte />} />
       {/* fallback para rotas inexistentes */}
       <Route path="*" element={
         <div style={{ padding: '50px', textAlign: 'center', color: 'red' }}>
