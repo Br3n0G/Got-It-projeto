@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  /* ============================ */
+  /*  (Painel do Prestador)       */
+  /* =============================*/
+  --color-text: #6b6375;
+  --color-text-h: #08060d;
+  --color-bg: #fff;
+  --color-border: #e5e4e7;
+  --color-code-bg: #f4f3ec;
+  --color-accent: #aa3bff;
+  --color-got-green: #00a63e;
+  --color-got-green-dark: #007a55;
+  --color-soft-panel: #f4fbf7;
+  --color-footer-dark: #101828;
+
+  /* =========================*/
+  /*  (Tela do Cliente)       */
+  /* =========================*/
+  --color-brand: #00a835;
+  --color-brand-dark: #00802b;
+  --color-brand-light: #f0fdf4;
+  --color-brand-badge: #dcfce7;
+  --color-app-dark: #101828;
+  --color-app-gray: #4a5565;
+  --color-app-gray2: #697586;
+  --color-app-gray3: #d1d5dc;
+  --color-app-surface: #f8fafc;
+
+  /* Fontes e Sombras Globais */
+  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+  --font-inter: 'Inter', sans-serif;
+}
+
+@layer utilities {
+  .bg-brand { background-color: #00a835 !important; }
+  .text-brand { color: #00a835 !important; }
+  .hover\:bg-brand-dark:hover { background-color: #00802b !important; }
+  .text-app-dark { color: #101828 !important; }
+  .text-app-gray { color: #4a5565 !important; }
+  .text-app-gray2 { color: #697586 !important; }
+  .text-app-gray3 { color: #d1d5dc !important; }
+  .bg-app-surface { background-color: #f8fafc !important; }
+}
+
+/* Modo Dark das suas telas do Prestador */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #9ca3af;
+    --color-text-h: #f3f4f6;
+    --color-bg: #16171d;
+    --color-border: #2e303a;
+    --color-code-bg: #1f2028;
+  }
+}
+
+@layer base {
+  body {
+    @apply m-0 bg-bg text-text font-sans text-[18px] leading-[145%];
+  }
+  @media (max-width: 1024px) {
+    body { @apply text-[16px]; }
+  }
+  h1, h2 {
+    @apply font-heading font-medium text-text-h;
+  }
+  h1 {
+    @apply text-[56px] tracking-[-1.68px] my-8;
+  }
+  @media (max-width: 1024px) {
+    h1 { @apply text-[36px] my-5; }
+  }
+  h2 {
+    @apply text-[24px] leading-[118%] tracking-[-0.24px] mb-2;
+  }
+  @media (max-width: 1024px) {
+    h2 { @apply text-[20px]; }
+  }
+  code {
+    @apply font-mono inline-flex rounded-[4px] text-text-h text-[15px] leading-[135%] px-2 py-1 bg-code-bg;
+  }
+}
