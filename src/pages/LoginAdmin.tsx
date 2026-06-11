@@ -77,7 +77,7 @@ export function LoginAdmin() {
           </div>
 
           {/* O Admin pode ser direcionado para um painel gerencial no futuro */}
-          <Link to="#" className="block mt-4">
+          <Link to="/admin" className="block mt-4">
             <Button className="w-full bg-[#00A63E] hover:bg-green-700 text-white py-6 text-base font-medium">
               Entrar
             </Button>

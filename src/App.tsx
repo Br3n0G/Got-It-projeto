@@ -17,6 +17,9 @@ import { LoginPrestador } from "./pages/LoginPrestador.tsx";
 import { CadastroPrestador } from "./pages/CadastroPrestador";
 import { ContaCriadaPrestador } from "./pages/ContaCriadaPrestador";
 import { LoginAdmin } from "./pages/LoginAdmin";
+import { AdminDashboard } from "./pages/admin/AdminDashboard.tsx";
+import { AdminClientes } from "./pages/admin/AdminClientes.tsx";
+import { AdminEspecialistas } from "./pages/admin/AdminEspecialistas.tsx";
 
 export default function App() {
   return (
@@ -44,6 +47,9 @@ export default function App() {
       <Route path="/cliente/enderecos" element={<ClientAddresses />} />
       <Route path="/cliente/contratos" element={<ClientContracts />} />
       <Route path="/cliente/configuracoes" element={<ClientSettings />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/clientes" element={<AdminClientes />} />
+      <Route path="/admin/especialistas" element={<AdminEspecialistas />} />
       {/* fallback para rotas inexistentes */}
       <Route path="*" element={
         <div style={{ padding: '50px', textAlign: 'center', color: 'red' }}>
