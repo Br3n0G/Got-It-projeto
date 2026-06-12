@@ -7,7 +7,7 @@ type Contract = {
   id: number;
   title: string;
   price: string;
-  provider: string;
+  client: string;
   status: "Finalizado" | "Em andamento" | "Cancelado";
 };
 
@@ -16,42 +16,42 @@ const contracts: Contract[] = [
     id: 1,
     title: "Contrato 1",
     price: "$0",
-    provider: "Prestador 1",
+    client: "Cliente 1",
     status: "Finalizado",
   },
   {
     id: 2,
     title: "Contrato 2",
     price: "$0",
-    provider: "Prestador 2",
+    client: "Cliente 2",
     status: "Em andamento",
   },
   {
     id: 3,
     title: "Contrato 3",
     price: "$0",
-    provider: "Prestador 3",
+    client: "Cliente 3",
     status: "Finalizado",
   },
   {
     id: 4,
     title: "Contrato 4",
     price: "$0",
-    provider: "Prestador 4",
+    client: "Cliente 4",
     status: "Cancelado",
   },
   {
     id: 5,
     title: "Contrato 5",
     price: "$0",
-    provider: "Prestador 5",
+    client: "Cliente 5",
     status: "Finalizado",
   },
   {
     id: 6,
     title: "Contrato 6",
     price: "$0",
-    provider: "Prestador 6",
+    client: "Cliente 6",
     status: "Em andamento",
   },
 ];
@@ -77,7 +77,7 @@ function ContractCard({ contract }: { contract: Contract }) {
         <p>{contract.title}</p>
 
         <p className="mt-1 text-xs text-gray-500">
-          Prestador: {contract.provider}
+          Cliente: {contract.client}
         </p>
 
         <div className="mt-2 flex items-center justify-between">
@@ -100,7 +100,7 @@ function ContractCard({ contract }: { contract: Contract }) {
   );
 }
 
-export function ClientContracts() {
+export function ProviderHistoryPage() {
   return (
     <Layout active="Contato">
       <main className="min-h-[900px] bg-white">
@@ -151,10 +151,10 @@ export function ClientContracts() {
 
             <div className="mb-5">
               <h3 className="mb-2 text-sm font-medium text-gray-800">
-                Especialização
+                Serviço
               </h3>
 
-              {["Suculentas", "Orquídeas", "Bonsai"].map((item) => (
+              {["Hora", "Visita", "Dia", "Semana"].map((item) => (
                 <label key={item} className="mb-2 flex items-center gap-2">
                   <input type="checkbox" defaultChecked />
                   <span>{item}</span>
@@ -220,10 +220,10 @@ export function ClientContracts() {
 
         <div className="px-8 pb-8 md:px-11">
           <Link
-            to="/cliente"
+            to="/prestador/home"
             className="inline-flex h-10 items-center justify-center rounded-md bg-[#00A63E] px-5 text-sm font-semibold text-white transition hover:bg-[#008F35]"
           >
-            ← Voltar para o Painel do Cliente
+            ← Voltar para o Painel do Prestador
           </Link>
         </div>
       </main>

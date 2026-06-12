@@ -1,10 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import {ProviderHome} from "./pages/ProviderHome";
-import {ProviderData} from "./pages/ProviderData";
-import {PricingPage} from "./pages/PricingPage";
+import { ProviderHome } from "./pages/ProviderHome";
+import { ProviderData } from "./pages/ProviderData";
+import { PricingPage } from "./pages/PricingPage";
+import { ProviderHistoryPage } from "./pages/ProviderHistoryPage";
 import PedidosAtivos from "./pages/PedidosAtivos";
+
 import AndreasIndex from "./pages/AndreasIndex";
+import { ProviderProfilePage } from "./pages/ProviderProfilePage";
+import { ChooseVisitTypePage } from "./pages/ChooseVisitTypePage";
 import { HomePage } from "./pages/HomePage";
+import Sobre from "./pages/Sobre";
+import { ContactPage } from "./pages/Contato";
+
 import { ClientHome } from "./pages/ClientHome";
 import { ClientData } from "./pages/ClientData";
 import { ClientAddresses } from "./pages/ClientAddresses";
@@ -13,9 +20,11 @@ import { ClientSettings } from "./pages/ClientSettings";
 import { LoginCliente } from "./pages/LoginCliente";
 import { CadastroCliente } from "./pages/CadastroCliente";
 import { ContaCriadaCliente } from "./pages/ContaCriadaCliente";
+
 import { LoginPrestador } from "./pages/LoginPrestador.tsx";
 import { CadastroPrestador } from "./pages/CadastroPrestador";
 import { ContaCriadaPrestador } from "./pages/ContaCriadaPrestador";
+
 import { LoginAdmin } from "./pages/LoginAdmin";
 import { AdminDashboard } from "./pages/admin/AdminDashboard.tsx";
 import { AdminClientes } from "./pages/admin/AdminClientes.tsx";
@@ -28,12 +37,20 @@ import { AdminSegurancaConta } from "./pages/admin/AdminSegurancaConta.tsx";
 import { AdminSuporte } from "./pages/admin/AdminSuporte.tsx";
 import { AdminGuard } from "./components/AdminGuard.tsx";
 
+import { PaymentSuccessPage } from "./pages/PaymentSuccessPage";
+
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/home" element={<HomePage />} />
       <Route path="/inicio/servicosdisponiveis" element={<AndreasIndex />} />
+      <Route path="/prestador/perfil" element={<ProviderProfilePage />} />
+      <Route path="/cliente/escolher-visita" element={<ChooseVisitTypePage />} />
+      <Route path="/pagamento/sucesso" element={<PaymentSuccessPage />} />
+      <Route path="/sobre" element={<Sobre />} />
+      <Route path="/contato" element={<ContactPage />} />
+
       {/* ── SESSÃO: AUTENTICAÇÃO E CADASTROS ────────────────────────────── */}
       {/* Fluxo do Cliente */}
       <Route path="/login/cliente" element={<LoginCliente />} />
@@ -44,6 +61,7 @@ export default function App() {
        <Route path="/login/prestador" element={<LoginPrestador />} />
       <Route path="/cadastro/prestador" element={<CadastroPrestador />} />
       <Route path="/conta-criada/prestador" element={<ContaCriadaPrestador />} />
+      <Route path="/prestador/historico" element={<ProviderHistoryPage />} />
       <Route path="/login/admin" element={<LoginAdmin />} />
       <Route path="/prestador/dados" element={<ProviderData />} />
       <Route path="/prestador/pricing" element={<PricingPage mode="day" />} />

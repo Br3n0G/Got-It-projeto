@@ -67,12 +67,12 @@ export function ClientHome() {
             <div className="pt-3">
               <Link
                 to="/inicio/servicosdisponiveis"
-                className="flex items-center gap-4 py-3 text-sm font-semibold text-brand transition hover:text-got-green-dark mb-2"
+                className="mb-2 flex items-center gap-4 py-3 text-sm font-semibold text-brand transition hover:text-got-green-dark"
               >
                 <Search size={18} strokeWidth={1.6} />
                 <span>Buscar Profissionais</span>
               </Link>
-              
+
               <Link
                 to="/cliente/configuracoes"
                 className="flex items-center gap-4 py-3 text-sm text-gray-700 transition hover:text-got-green"
@@ -82,7 +82,7 @@ export function ClientHome() {
               </Link>
 
               <Link
-                to="#"
+                to="/contato"
                 className="flex items-center gap-4 py-3 text-sm text-gray-700 transition hover:text-got-green"
               >
                 <Star size={18} strokeWidth={1.6} />

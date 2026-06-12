@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import {
   ClipboardList,
   FileText,
@@ -6,17 +6,33 @@ import {
   PlusSquare,
   Settings,
   Star,
-} from 'lucide-react'
-import { AccountHeader } from '../components/AccountHeader'
-import { GreenIllustration } from '../components/GreenIllustration'
-import { Layout } from '../components/Layout'
+  User,
+} from "lucide-react";
+import { GreenIllustration } from "../components/GreenIllustration";
+import { Layout } from "../components/Layout";
 
 const menu = [
-  { icon: ClipboardList, label: 'Histórico de Contratos', path: '#' },
-  { icon: FileText, label: 'Dados da Conta', path: '/prestador/dados' },
-  { icon: MapPin, label: 'Pedidos ativos', path: '/prestador/pedidosativos' },
-  { icon: PlusSquare, label: 'Alterar preços de contratação', path: '/prestador/pricing' },
-]
+  {
+    icon: ClipboardList,
+    label: "Histórico de Contratos",
+    path: "/prestador/historico",
+  },
+  {
+    icon: FileText,
+    label: "Dados da Conta",
+    path: "/prestador/dados",
+  },
+  {
+    icon: MapPin,
+    label: "Pedidos ativos",
+    path: "/prestador/pedidosativos",
+  },
+  {
+    icon: PlusSquare,
+    label: "Alterar preços de contratação",
+    path: "/prestador/pricing",
+  },
+];
 
 export function ProviderHome() {
   return (
@@ -25,9 +41,20 @@ export function ProviderHome() {
         <GreenIllustration />
 
         <section className="bg-soft-panel px-6 py-2 md:px-7">
-          <AccountHeader />
+          <div className="mb-7 border border-got-green/20 bg-white px-7 py-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-got-green text-white">
+                <User size={24} strokeWidth={1.8} />
+              </div>
 
-          <div className="border-y border-black/10 py-3">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">Nome</h2>
+                <p className="text-lg text-gray-700">Prestador</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-y border-black/10 py-4">
             {menu.map(({ icon: Icon, label, path }) => (
               <Link
                 to={path}
@@ -35,23 +62,30 @@ export function ProviderHome() {
                 className="flex items-center gap-4 py-4 text-base text-gray-700 transition hover:text-got-green"
               >
                 <Icon size={22} strokeWidth={1.6} />
-                {label}
+                <span>{label}</span>
               </Link>
             ))}
           </div>
 
-          <div className="pt-4">
-            <Link to="#" className="flex items-center gap-4 py-3 text-base text-gray-700 hover:text-got-green">
+          <div className="pt-5">
+            <Link
+              to="#"
+              className="flex items-center gap-4 py-3 text-base text-gray-700 transition hover:text-got-green"
+            >
               <Settings size={22} strokeWidth={1.6} />
-              Configuração
+              <span>Configuração</span>
             </Link>
-            <Link to="#" className="flex items-center gap-4 py-3 text-base text-gray-700 hover:text-got-green">
+
+            <Link
+              to="/contato"
+              className="flex items-center gap-4 py-3 text-base text-gray-700 transition hover:text-got-green"
+            >
               <Star size={22} strokeWidth={1.6} />
-              Ajuda
+              <span>Ajuda</span>
             </Link>
           </div>
         </section>
       </main>
     </Layout>
-  )
+  );
 }
