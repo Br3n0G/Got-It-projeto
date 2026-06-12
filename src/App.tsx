@@ -26,6 +26,7 @@ import { AdminAccountNotifications } from "./pages/admin/AdminAccountNotificatio
 import { AdminPerfilDados } from "./pages/admin/AdminPerfilDados.tsx";
 import { AdminSegurancaConta } from "./pages/admin/AdminSegurancaConta.tsx";
 import { AdminSuporte } from "./pages/admin/AdminSuporte.tsx";
+import { AdminGuard } from "./components/AdminGuard.tsx";
 
 export default function App() {
   return (
@@ -39,7 +40,7 @@ export default function App() {
       <Route path="/cadastro/cliente" element={<CadastroCliente />} />
       <Route path="/conta-criada/cliente" element={<ContaCriadaCliente />} />
 
-      {/* Fluxo do Prestador e Admin (Ativar quando os arquivos forem criados) */}
+      {/* Fluxo do Prestador e Admin */}
        <Route path="/login/prestador" element={<LoginPrestador />} />
       <Route path="/cadastro/prestador" element={<CadastroPrestador />} />
       <Route path="/conta-criada/prestador" element={<ContaCriadaPrestador />} />
@@ -53,15 +54,20 @@ export default function App() {
       <Route path="/cliente/enderecos" element={<ClientAddresses />} />
       <Route path="/cliente/contratos" element={<ClientContracts />} />
       <Route path="/cliente/configuracoes" element={<ClientSettings />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/clientes" element={<AdminClientes />} />
-      <Route path="/admin/especialistas" element={<AdminEspecialistas />} />
-      <Route path="/admin/contratos" element={<AdminContratos />} />
-      <Route path="/admin/pagamentos" element={<AdminPagamentos />} />
-      <Route path="/admin/perfil" element={<AdminPerfilDados />} />
-      <Route path="/admin/perfil/seguranca" element={<AdminSegurancaConta />} />
-      <Route path="/admin/perfil/notificacoes" element={<AdminAccountNotifications />} />
-      <Route path="/admin/suporte" element={<AdminSuporte />} />
+
+      {/* 🛡️ ROTAS PROTEGIDAS PELO ADMIN GUARD */}
+      <Route element={<AdminGuard />}>
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/clientes" element={<AdminClientes />} />
+        <Route path="/admin/especialistas" element={<AdminEspecialistas />} />
+        <Route path="/admin/contratos" element={<AdminContratos />} />
+        <Route path="/admin/pagamentos" element={<AdminPagamentos />} />
+        <Route path="/admin/perfil" element={<AdminPerfilDados />} />
+        <Route path="/admin/perfil/seguranca" element={<AdminSegurancaConta />} />
+        <Route path="/admin/perfil/notificacoes" element={<AdminAccountNotifications />} />
+        <Route path="/admin/suporte" element={<AdminSuporte />} />
+      </Route>
+
       {/* fallback para rotas inexistentes */}
       <Route path="*" element={
         <div style={{ padding: '50px', textAlign: 'center', color: 'red' }}>

@@ -94,7 +94,7 @@ export function AdminAccountNotifications() {
             })}
 
             <div className="pt-3 border-t border-[#E5E7EB]">
-              <Link to="/logout" className="flex items-center gap-3.5 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-all">
+              <Link to="/login/admin" className="flex items-center gap-3.5 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-all">
                 <LogOut className="w-5 h-5 shrink-0" />
                 Sair da Conta
               </Link>
