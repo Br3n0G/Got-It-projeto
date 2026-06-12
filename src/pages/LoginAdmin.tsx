@@ -1,12 +1,61 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 
+// IMPORTAÇÕES DA VALIDAÇÃO E API
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// SCHEMA DE VALIDAÇÃO DO ZOD
+const loginAdminSchema = z.object({
+  email: z.string().email("Digite um e-mail válido"),
+  senha: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
+});
+
+type LoginAdminInputs = z.infer<typeof loginAdminSchema>;
+
 export function LoginAdmin() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // INICIANDO O REACT HOOK FORM
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginAdminInputs>({
+    resolver: zodResolver(loginAdminSchema)
+  });
+
+  // FUNÇÃO ASSÍNCRONA PARA A API
+  const onSubmitLogin = async (dados: LoginAdminInputs) => {
+    setIsLoading(true);
+
+    // ATALHO DE TESTE (MOCK): Remova quando o Back-End estiver pronto
+    if (dados.email === "admin@gotit.com") {
+      navigate("/admin");
+      return;
+    }
+
+    try {
+      const resposta = await fetch("http://localhost:3000/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados),
+      });
+
+      if (!resposta.ok) throw new Error("Credenciais inválidas");
+
+      navigate("/admin"); 
+      
+    } catch (error) {
+      console.error("Erro na API:", error);
+      alert("E-mail ou senha incorretos. Acesso negado.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <AuthLayout
@@ -38,13 +87,20 @@ export function LoginAdmin() {
           </span>
         </div>
 
-        <form className="space-y-5">
+        {/* FORMULÁRIO BLINDADO */}
+        <form className="space-y-5" onSubmit={handleSubmit(onSubmitLogin)}>
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-700">E-mail</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input type="email" placeholder="seu@email.com" className="pl-10" />
+              <Input 
+                type="email" 
+                placeholder="admin@gotit.com" 
+                {...register("email")}
+                className={`pl-10 ${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}`} 
+              />
             </div>
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-1.5">
@@ -54,7 +110,8 @@ export function LoginAdmin() {
               <Input 
                 type={showPassword ? "text" : "password"} 
                 placeholder="••••••••" 
-                className="pl-10 pr-10" 
+                {...register("senha")}
+                className={`pl-10 pr-10 ${errors.senha ? "border-red-500 focus-visible:ring-red-500" : ""}`} 
               />
               <button
                 type="button"
@@ -64,6 +121,7 @@ export function LoginAdmin() {
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
+            {errors.senha && <p className="text-red-500 text-xs mt-1">{errors.senha.message}</p>}
           </div>
 
           <div className="flex items-center justify-between text-sm">
@@ -76,12 +134,15 @@ export function LoginAdmin() {
             </a>
           </div>
 
-          {/* O Admin pode ser direcionado para um painel gerencial no futuro */}
-          <Link to="/admin" className="block mt-4">
-            <Button className="w-full bg-[#00A63E] hover:bg-green-700 text-white py-6 text-base font-medium">
-              Entrar
-            </Button>
-          </Link>
+          <Button 
+            type="submit" 
+            disabled={isLoading}
+            className={`w-full py-6 text-base mt-4 transition-all ${
+              isLoading ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-[#00A63E] hover:bg-green-700 text-white'
+            }`}
+          >
+            {isLoading ? "Autenticando..." : "Entrar no Painel"}
+          </Button>
         </form>
 
         <div className="mt-8 flex items-center gap-4 before:h-px before:flex-1 before:bg-gray-200 after:h-px after:flex-1 after:bg-gray-200">

@@ -1,17 +1,67 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 
+// IMPORTAÇÕES DA VALIDAÇÃO E API
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// SCHEMA DE VALIDAÇÃO DO ZOD
+const loginSchema = z.object({
+  email: z.string().email("Digite um e-mail válido"),
+  senha: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
+});
+
+type LoginFormInputs = z.infer<typeof loginSchema>;
+
 export function LoginCliente() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault(); // Impede a página de recarregar
-    
-    // Futuramente, aqui vai o código para verificar a senha no MySQL 5.7
-    // Por enquanto, apenas redirecionamos direto para o painel:
-    navigate("/cliente"); 
+  // INICIANDO O REACT HOOK FORM
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>({
+    resolver: zodResolver(loginSchema)
+  });
+
+  // FUNÇÃO ASSÍNCRONA PARA A API
+  const onSubmitLogin = async (dados: LoginFormInputs) => {
+    setIsLoading(true);
+
+    // ATALHO DE TESTE (MOCK): Remova quando o Back-End estiver pronto
+    if (dados.email === "teste@gotit.com") {
+      navigate("/prestador/home");
+      return;
+    }
+
+    try {
+      // Conexão com a futura API
+      const resposta = await fetch("http://localhost:3000/api/clientes/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: dados.email,
+          senha: dados.senha
+        }),
+      });
+
+      if (!resposta.ok) {
+        throw new Error("Credenciais inválidas");
+      }
+
+      // Sucesso! Redireciona para o painel do cliente
+      navigate("/cliente"); 
+      
+    } catch (error) {
+      console.error("Erro na API:", error);
+      alert("E-mail ou senha incorretos. Tente novamente.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -46,16 +96,28 @@ export function LoginCliente() {
           </Link>
         </div>
 
-        {/* O Formulário ÚNICO e corrigido */}
-        <form className="space-y-5" onSubmit={handleLogin}>
+        {/* Formulário Blindado */}
+        <form className="space-y-5" onSubmit={handleSubmit(onSubmitLogin)}>
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">E-mail</label>
-            <Input type="email" placeholder="seu@email.com" />
+            <Input 
+              type="email" 
+              placeholder="seu@email.com" 
+              {...register("email")}
+              className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
+            />
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">Senha</label>
-            <Input type="password" placeholder="••••••••" /> 
+            <Input 
+              type="password" 
+              placeholder="••••••••" 
+              {...register("senha")}
+              className={errors.senha ? "border-red-500 focus-visible:ring-red-500" : ""}
+            />
+            {errors.senha && <p className="text-red-500 text-xs mt-1">{errors.senha.message}</p>}
           </div>
 
           <div className="flex items-center justify-between text-sm">
@@ -73,8 +135,14 @@ export function LoginCliente() {
             </a>
           </div>
 
-          <Button type="submit" className="w-full bg-[#00A63E] hover:bg-green-700 text-white py-6 text-base mt-4">
-            Entrar
+          <Button 
+            type="submit" 
+            disabled={isLoading}
+            className={`w-full py-6 text-base mt-4 transition-all ${
+              isLoading ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-[#00A63E] hover:bg-green-700 text-white'
+            }`}
+          >
+            {isLoading ? "Entrando..." : "Entrar"}
           </Button>
         </form>
 

@@ -1,15 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext"; // Importa o nosso hook
 
 export function AdminGuard() {
-  // ⚠️ SIMULAÇÃO: No futuro, isso virá do seu Contexto de Autenticação ou Token JWT
-  const usuarioLogado = true;
-  const cargo = "ADMIN";
+  const { user, userType, isLoading } = useAuth();
 
-  // Se não estiver logado ou não for admin, redireciona para o login
-  if (!usuarioLogado || cargo !== "ADMIN") {
-    return <Navigate to="/" replace />;
+  // Se o contexto ainda estiver lendo o localStorage, mostra uma tela vazia temporária
+  if (isLoading) {
+    return <div className="flex h-screen w-screen items-center justify-center">Carregando...</div>;
   }
 
-  // Se passar no teste, o <Outlet /> renderiza a página que o admin tentou acessar
+  // Só permite o acesso se houver um utilizador logado E se ele for do tipo ADMIN
+  if (!user || userType !== "ADMIN") {
+    return <Navigate to="/login/admin" replace />;
+  }
+
   return <Outlet />;
 }

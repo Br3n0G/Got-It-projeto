@@ -5,18 +5,68 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { User, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
 
+// IMPORTAÇÕES DA VALIDAÇÃO E API
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// SCHEMA DE VALIDAÇÃO DO ZOD
+const cadastroSchema = z.object({
+  nome: z.string().min(3, "O nome precisa ter pelo menos 3 letras"),
+  email: z.string().email("Digite um e-mail válido"),
+  telefone: z.string().min(10, "Digite um telefone válido"),
+  senha: z.string().min(8, "A senha precisa ter no mínimo 8 caracteres"),
+  confirmarSenha: z.string()
+}).refine((dados) => dados.senha === dados.confirmarSenha, {
+  message: "As senhas não coincidem",
+  path: ["confirmarSenha"],
+});
+
+type CadastroFormInputs = z.infer<typeof cadastroSchema>;
+
 export function CadastroCliente() {
-  // Estados para controlar a visibilidade das senhas (olhinho)
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  // Função que impede recarregamento e navega para a tela de conta criada
-  const handleCadastro = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Redireciona para a tela de confirmação de conta criada do cliente
-    navigate("/conta-criada/cliente");
+  // INICIANDO O REACT HOOK FORM
+  const { register, handleSubmit, formState: { errors } } = useForm<CadastroFormInputs>({
+    resolver: zodResolver(cadastroSchema)
+  });
+
+  // FUNÇÃO ASSÍNCRONA PARA A API
+  const onSubmitCadastro = async (dados: CadastroFormInputs) => {
+    setIsLoading(true);
+
+    try {
+      const resposta = await fetch("http://localhost:3000/api/clientes/cadastro", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome: dados.nome,
+          email: dados.email,
+          telefone: dados.telefone,
+          senha: dados.senha
+        }),
+      });
+
+      if (!resposta.ok) {
+        throw new Error("Erro ao cadastrar");
+      }
+
+      // Redireciona para a tela de confirmação de conta criada do cliente
+      navigate("/conta-criada/cliente");
+      
+    } catch (error) {
+      console.error("Erro na API:", error);
+      alert("Houve um problema de conexão. Tente novamente.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,37 +101,51 @@ export function CadastroCliente() {
           </Link>
         </div>
 
-        {/* Formulário de Cadastro */}
-        <form className="space-y-4" onSubmit={handleCadastro}>
+        {/* Formulário de Cadastro Blindado */}
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmitCadastro)}>
           
-          {/* Campo: Nome Completo */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-700">Nome Completo</label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input type="text" placeholder="seu nome" className="pl-10" />
+              <Input 
+                type="text" 
+                placeholder="Seu nome" 
+                {...register("nome")}
+                className={`pl-10 ${errors.nome ? "border-red-500 focus-visible:ring-red-500" : ""}`} 
+              />
             </div>
+            {errors.nome && <p className="text-red-500 text-xs mt-1">{errors.nome.message}</p>}
           </div>
 
-          {/* Campo: E-mail */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-700">E-mail</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input type="email" placeholder="seu@email.com" className="pl-10" />
+              <Input 
+                type="email" 
+                placeholder="seu@email.com" 
+                {...register("email")}
+                className={`pl-10 ${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}`} 
+              />
             </div>
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
 
-          {/* Campo: Telefone */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-700">Telefone</label>
             <div className="relative">
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input type="text" placeholder="(00) 00000-0000" className="pl-10" />
+              <Input 
+                type="text" 
+                placeholder="(00) 00000-0000" 
+                {...register("telefone")}
+                className={`pl-10 ${errors.telefone ? "border-red-500 focus-visible:ring-red-500" : ""}`} 
+              />
             </div>
+            {errors.telefone && <p className="text-red-500 text-xs mt-1">{errors.telefone.message}</p>}
           </div>
 
-          {/* Campo: Senha */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-700">Senha</label>
             <div className="relative">
@@ -89,7 +153,8 @@ export function CadastroCliente() {
               <Input 
                 type={showPassword ? "text" : "password"} 
                 placeholder="••••••••" 
-                className="pl-10 pr-10" 
+                {...register("senha")}
+                className={`pl-10 pr-10 ${errors.senha ? "border-red-500 focus-visible:ring-red-500" : ""}`} 
               />
               <button
                 type="button"
@@ -99,9 +164,9 @@ export function CadastroCliente() {
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
+            {errors.senha && <p className="text-red-500 text-xs mt-1">{errors.senha.message}</p>}
           </div>
 
-          {/* Campo: Confirme a Senha */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-700">Confirme a senha</label>
             <div className="relative">
@@ -109,7 +174,8 @@ export function CadastroCliente() {
               <Input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="••••••••"
-                className="pl-10 pr-10"
+                {...register("confirmarSenha")}
+                className={`pl-10 pr-10 ${errors.confirmarSenha ? "border-red-500 focus-visible:ring-red-500" : ""}`}
               />
               <button
                 type="button"
@@ -119,10 +185,15 @@ export function CadastroCliente() {
                 {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
+            {errors.confirmarSenha && <p className="text-red-500 text-xs mt-1">{errors.confirmarSenha.message}</p>}
           </div>
 
-          <Button type="submit" className="w-full mt-2">
-            Criar Conta
+          <Button 
+            type="submit" 
+            disabled={isLoading}
+            className={`w-full mt-2 transition-all ${isLoading ? 'bg-gray-400 cursor-not-allowed text-white' : ''}`}
+          >
+            {isLoading ? "Criando Conta..." : "Criar Conta"}
           </Button>
         </form>
       </div>
