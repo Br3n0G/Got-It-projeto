@@ -31,8 +31,8 @@ export function LoginCliente() {
     setIsLoading(true);
 
     // ATALHO DE TESTE (MOCK): Remova quando o Back-End estiver pronto
-    if (dados.email === "teste@gotit.com") {
-      navigate("/prestador/home");
+    if (dados.email === "cliente@gotit.com") {
+      navigate("/cliente"); // <-- Agora ele vai pro painel do Cliente!
       return;
     }
 

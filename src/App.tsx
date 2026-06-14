@@ -39,6 +39,7 @@ import { AdminSegurancaConta } from "./pages/admin/AdminSegurancaConta.tsx";
 import { AdminSuporte } from "./pages/admin/AdminSuporte.tsx";
 
 import { PaymentSuccessPage } from "./pages/PaymentSuccessPage";
+import { CheckoutPage } from "./pages/CheckoutPage";
 
 // ── IMPORTAÇÕES DE SEGURANÇA E CONTEXTO ──────────────────────────────────
 import { AuthProvider } from "./contexts/AuthContext"; // Caminho corrigido para src/contexts
@@ -56,7 +57,6 @@ export default function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/inicio/servicosdisponiveis" element={<AndreasIndex />} />
         <Route path="/prestador/perfil" element={<ProviderProfilePage />} />
-        <Route path="/cliente/escolher-visita" element={<ChooseVisitTypePage />} />
         <Route path="/pagamento/sucesso" element={<PaymentSuccessPage />} />
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/contato" element={<ContactPage />} />
@@ -66,6 +66,7 @@ export default function App() {
         <Route path="/login/cliente" element={<LoginCliente />} />
         <Route path="/cadastro/cliente" element={<CadastroCliente />} />
         <Route path="/conta-criada/cliente" element={<ContaCriadaCliente />} />
+        <Route path="/cliente/pagamento" element={<CheckoutPage />} />
 
         {/* Fluxo do Prestador e Admin */}
         <Route path="/login/prestador" element={<LoginPrestador />} />

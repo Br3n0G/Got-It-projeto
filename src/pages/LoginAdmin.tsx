@@ -4,6 +4,7 @@ import { AuthLayout } from "../layout/AuthLayout";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 // IMPORTAÇÕES DA VALIDAÇÃO E API
 import { useForm } from "react-hook-form";
@@ -22,18 +23,19 @@ export function LoginAdmin() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // INICIANDO O REACT HOOK FORM
   const { register, handleSubmit, formState: { errors } } = useForm<LoginAdminInputs>({
     resolver: zodResolver(loginAdminSchema)
   });
 
-  // FUNÇÃO ASSÍNCRONA PARA A API
   const onSubmitLogin = async (dados: LoginAdminInputs) => {
     setIsLoading(true);
 
-    // ATALHO DE TESTE (MOCK): Remova quando o Back-End estiver pronto
+    // MOCK CORRIGIDO: Agora ele avisa o sistema global que o Admin logou!
     if (dados.email === "admin@gotit.com") {
+      login("token-falso-admin", { id: "999", nome: "Administrador", email: dados.email }, "ADMIN");
       navigate("/admin");
       return;
     }
@@ -46,9 +48,7 @@ export function LoginAdmin() {
       });
 
       if (!resposta.ok) throw new Error("Credenciais inválidas");
-
       navigate("/admin"); 
-      
     } catch (error) {
       console.error("Erro na API:", error);
       alert("E-mail ou senha incorretos. Acesso negado.");

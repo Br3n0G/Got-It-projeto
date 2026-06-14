@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { api } from '../services/api';
+import { api } from '../../services/api';
 
 // Definição dos tipos de utilizadores suportados pela plataforma
 export type UserType = 'CLIENTE' | 'PRESTADOR' | 'ADMIN';

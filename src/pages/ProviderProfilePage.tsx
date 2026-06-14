@@ -103,7 +103,7 @@ export function ProviderProfilePage() {
             </div>
 
             <Link
-              to="/cliente/escolher-visita"
+              to="/cliente/pagamento"
               className="mt-16 flex h-11 w-full items-center justify-center rounded-md bg-[#00A63E] text-sm font-medium text-white transition hover:bg-[#008F35]"
             >
               Contratar

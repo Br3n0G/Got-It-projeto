@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/AndreasNavbar";
 import Footer from "../components/AndreasFooter";
+import { api } from "../services/api";
+import { useState, useEffect } from "react";
 
 /* ── SVG Icons ─────────────────────────────────────────── */
 const SearchIcon = () => (
@@ -69,20 +71,12 @@ interface Professional {
   image: string;
 }
 
-const professionals: Professional[] = [
+const mockProfessionals: Professional[] = [
   {
-    id: 1,
-    name: "Mariana Costa",
-    title: "Botânica Especialista",
-    rating: 5,
-    reviews: 127,
+    id: 1, name: "Mariana Costa", title: "Botânica Especialista", rating: 5, reviews: 127,
     bio: "Botânica com 10 anos de experiência. Especializada em plantas tropicais e orquídeas raras.",
-    tags: ["Plantas Tropicais", "Orquídeas", "Samambaias"],
-    jobs: 342,
-    responseTime: "Responde em 1 hora",
-    location: "Jardins, São Paulo",
-    price: 95,
-    available: true,
+    tags: ["Plantas Tropicais", "Orquídeas", "Samambaias"], jobs: 342, responseTime: "Responde em 1 hora",
+    location: "Jardins, São Paulo", price: 95, available: true,
     image: "https://api.builder.io/api/v1/image/assets/TEMP/e681747ee745617cc4f004c89d869373acb9f91c?width=120",
   },
   {
@@ -189,7 +183,7 @@ const howItWorks = [
 /* ── ProfessionalCard ───────────────────────────────────── */
 function ProfessionalCard({ pro }: { pro: Professional }) {
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-1 flex-col gap-0 p-6">
         <div className="mb-4 flex items-start gap-4">
           <div className="relative shrink-0">
@@ -296,7 +290,7 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
 
         <div className="mt-auto flex gap-2">
           <Link
-            to="/cliente/escolher-visita"
+            to="/cliente/pagamento"
             className="flex-1 rounded-[10px] bg-brand py-3 text-center text-sm font-medium leading-5 tracking-[-0.15px] text-white transition-colors hover:bg-brand-dark"
           >
             Contratar
@@ -316,6 +310,33 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
 
 /* ── Page ───────────────────────────────────────────────── */
 export default function AndreasIndex() {
+  const [profissionais, setProfissionais] = useState<Professional[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [termoBusca, setTermoBusca] = useState("");
+
+  useEffect(() => {
+    async function carregarProfissionais() {
+      try {
+        setIsLoading(true);
+        const resposta = await api.get('/especialistas');
+        setProfissionais(resposta.data);
+      } catch (error) {
+        console.warn("API offline ou em desenvolvimento. Usando dados simulados para apresentação.");
+        setProfissionais(mockProfessionals);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    carregarProfissionais();
+  }, []);
+
+  const profissionaisFiltrados = profissionais.filter(pro => 
+    pro.name.toLowerCase().includes(termoBusca.toLowerCase()) || 
+    pro.title.toLowerCase().includes(termoBusca.toLowerCase()) ||
+    pro.tags.some(tag => tag.toLowerCase().includes(termoBusca.toLowerCase()))
+  );
+  
   return (
     <div className="flex min-h-screen flex-col font-inter">
       <Navbar />
@@ -334,11 +355,14 @@ export default function AndreasIndex() {
               </p>
             </div>
 
+            {/* 👇 1. HTML CORRIGIDO: Input agora obedece ao estado termoBusca */}
             <div className="flex w-full max-w-[768px] items-center gap-2 rounded-[14px] bg-white px-4 py-2 shadow-lg">
               <SearchIcon />
 
               <input
                 type="text"
+                value={termoBusca}
+                onChange={(e) => setTermoBusca(e.target.value)}
                 placeholder="Busque por especialidade, nome ou tipo de planta..."
                 className="flex-1 bg-transparent py-3 text-base leading-6 tracking-[-0.31px] text-[#364153] outline-none placeholder:text-[#364153]"
               />
@@ -370,16 +394,29 @@ export default function AndreasIndex() {
                 </select>
               </div>
 
+              {/* 👇 2. HTML CORRIGIDO: Contador dinâmico em vez do número 6 chumbado */}
               <p className="text-sm leading-6 text-[#4A5565]">
-                <span className="font-semibold">6</span> profissionais encontrados
+                <span className="font-semibold">{profissionaisFiltrados.length}</span> profissionais encontrados
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {professionals.map((pro) => (
-                <ProfessionalCard key={pro.id} pro={pro} />
-              ))}
-            </div>
+            {/* 👇 3. HTML CORRIGIDO: Lógica de Carregamento e renderização da lista filtrada */}
+            {isLoading ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"></div>
+              </div>
+            ) : profissionaisFiltrados.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-[#99A1AF] text-lg">Nenhum profissional encontrado para "{termoBusca}".</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {profissionaisFiltrados.map((pro) => (
+                  <ProfessionalCard key={pro.id} pro={pro} />
+                ))}
+              </div>
+            )}
+
           </div>
         </section>
 
@@ -432,7 +469,7 @@ export default function AndreasIndex() {
             </p>
 
             <Link
-              to="/login/prestador"
+              to="/cadastro/prestador"
               className="mt-2 inline-flex items-center rounded-[10px] bg-white px-8 py-4 text-lg font-medium leading-7 tracking-[-0.44px] text-brand transition-colors hover:bg-[#F0FDF4]"
             >
               Quero me Cadastrar
