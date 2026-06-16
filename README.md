@@ -71,3 +71,15 @@ export default defineConfig([
   },
 ])
 ```
+1. Rodar o backend:
+cd backend
+source venv/Scripts/activate
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 3000
+
+2. Rodar o frontend:
+npm install
+npm run dev
+
+3. Acessar:
+Frontend: http://localhost:5173
+Backend: http://localhost:3000/docs
