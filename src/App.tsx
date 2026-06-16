@@ -78,6 +78,7 @@ export default function App() {
         <Route path="/prestador/pricing" element={<PricingPage mode="day" />} />
         <Route path="/prestador/pedidosativos" element={<PedidosAtivos />} />
         <Route path="/prestador/home" element={<ProviderHome />} />
+        <Route path="/prestador/perfil" element={<ProviderProfilePage />} />
         <Route path="/cliente" element={<ClientHome />} />
         <Route path="/cliente/dados" element={<ClientData />} />
         <Route path="/cliente/enderecos" element={<ClientAddresses />} />

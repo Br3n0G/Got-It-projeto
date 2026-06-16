@@ -2,16 +2,14 @@ import axios from 'axios';
 
 // 1. Cria a instância centralizada do Axios
 export const api = axios.create({
-  // Quando o Andreas e o João subirem o back-end, essa é a ÚNICA linha 
-  // do projeto inteiro que vocês vão precisar alterar!
-  baseURL: 'http://localhost:3000/api', 
+  baseURL: 'http://127.0.0.1:8000', 
   
   // Timeout: Se o MySQL demorar mais de 10 segundos para responder, 
   // cancela a requisição para não deixar a tela do usuário travada para sempre.
   timeout: 10000, 
 });
 
-// 2. INTERCEPTOR DE REQUISIÇÃO (O "Porteiro" de Saída)
+// 2. Interceptor de Requisição (O "Porteiro" de Saída)
 // Tudo que o React tentar enviar para o Back-End vai passar por aqui primeiro.
 api.interceptors.request.use(
   (config) => {
@@ -30,7 +28,7 @@ api.interceptors.request.use(
   }
 );
 
-// 3. INTERCEPTOR DE RESPOSTA (O "Porteiro" de Entrada)
+// 3. Interceptor de Resposta (O "Porteiro" de Entrada)
 // Tudo que o Back-End responder para o React vai passar por aqui primeiro.
 api.interceptors.response.use(
   (response) => {

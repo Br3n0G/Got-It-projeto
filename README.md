@@ -1,85 +1,232 @@
-# React + TypeScript + Vite
+# 🌱 Got It!
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📖 Descrição do Projeto
 
-Currently, two official plugins are available:
+O **Got It!** é uma plataforma inovadora de marketplace que conecta proprietários de plantas a especialistas da área, como jardineiros, paisagistas e botânicos.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+A plataforma oferece:
 
-## React Compiler
+* Vitrine de profissionais especializados;
+* Histórico de serviços realizados;
+* Painel administrativo dinâmico;
+* Simulação de lógica de split de pagamentos para prestadores de serviço;
+* Sistema de autenticação para diferentes perfis de usuários.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+# 👥 Integrantes e Atribuições
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Integrante    | Matrícula                  | Responsabilidades                                                                                                   |
+| ------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Breno dos Santos Guimarães**     | `UC24101685`          | Desenvolvimento Frontend (React, Vite e Tailwind CSS), Integração de APIs, Lógica de Autenticação e Design UI/UX    |
+| **João Lucas Dutra Gomes**      | `UC24101698`      | Desenvolvimento Backend (FastAPI e Python), Modelagem de Banco de Dados (MySQL) e Integração de Pagamentos (Stripe) |
+| **Gleyciane Oliveira Pereira** | `UC24100425` | Estruturação de Dados, Validação e Garantia de Qualidade  | Desenvolvimento Frontend       
+| **Andreas Gomes Marchi**   | `UC24101536`   | Suporte Frontend/Backend e Organização da Estrutura do Repositório                                                  |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# 💻 Como Executar o Frontend
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Pré-requisitos
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+* Node.js instalado
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Passos
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-1. Rodar o backend:
-cd backend
-source venv/Scripts/activate
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 3000
+1. Abra um terminal na pasta raiz do frontend.
 
-2. Rodar o frontend:
+2. Instale as dependências:
+
+```bash
 npm install
-npm run dev
+```
 
-3. Acessar:
-Frontend: http://localhost:5173
-Backend: http://localhost:3000/docs
+3. Inicie o servidor de desenvolvimento:
+
+```bash
+npm run dev
+```
+
+4. A aplicação estará disponível no endereço informado pelo terminal, normalmente:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# ⚙️ Como Executar o Backend
+
+## Pré-requisitos
+
+* Python instalado
+
+## Passos
+
+### 1. Acesse a pasta do backend
+
+```bash
+cd backend_gotit_emergencia
+```
+
+### 2. Crie um ambiente virtual
+
+#### Windows
+
+```bash
+python -m venv venv
+```
+
+#### Linux / macOS
+
+```bash
+python3 -m venv venv
+```
+
+### 3. Ative o ambiente virtual
+
+#### Windows (PowerShell)
+
+```bash
+.\venv\Scripts\Activate.ps1
+```
+
+#### Windows (CMD)
+
+```bash
+venv\Scripts\activate
+```
+
+#### Linux / macOS
+
+```bash
+source venv/bin/activate
+```
+
+### 4. Instale as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Inicie o servidor
+
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 3000
+```
+
+> A porta **3000** é utilizada para manter compatibilidade com as chamadas Axios configuradas no frontend.
+
+### 6. Acesse a documentação da API
+
+```text
+http://localhost:3000/docs
+```
+
+---
+
+# 🗄️ Dados Iniciais (Seed)
+
+Para facilitar demonstrações e apresentações, o backend inicia com um banco de dados **fake em memória**, contendo registros previamente cadastrados:
+
+* Clientes;
+* Prestadores de serviço;
+* Contratos;
+* Usuários administrativos.
+
+> **Observação:** O script oficial para implantação em banco relacional MySQL 5.7 encontra-se disponível no arquivo:
+
+```text
+seed_mysql.sql
+```
+
+---
+
+# 🔑 Credenciais de Teste
+
+## Cliente
+
+**Email**
+
+```text
+joao@email.com
+```
+
+**Senha**
+
+```text
+123456
+```
+
+---
+
+## Prestador
+
+**Email**
+
+```text
+ana@email.com
+```
+
+**Senha**
+
+```text
+123456
+```
+
+---
+
+## Administrador
+
+**Email**
+
+```text
+admin@gotit.com
+```
+
+**Senha**
+
+```text
+admin123
+```
+
+---
+
+# ⚠️ Observações Importantes
+
+O backend atual utiliza armazenamento em memória para agilizar testes e apresentações.
+
+Isso significa que:
+
+* Todos os dados adicionados manualmente durante a execução serão perdidos ao reiniciar o servidor;
+* Ao reiniciar o Uvicorn, o sistema será restaurado para o estado inicial definido no seed;
+* Nenhuma alteração realizada durante a sessão será persistida.
+
+---
+
+# 🚀 Tecnologias Utilizadas
+
+### Frontend
+
+* React
+* Vite
+* Tailwind CSS
+* Axios
+
+### Backend
+
+* Python
+* FastAPI
+* Uvicorn
+
+### Banco de Dados
+
+* MySQL 5.7
+
+### Integrações
+
+* Stripe (simulação de pagamentos e split de valores)
+
+---
+
+Desenvolvido para o projeto **Got It! 🌱**

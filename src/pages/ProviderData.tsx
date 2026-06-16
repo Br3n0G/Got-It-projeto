@@ -62,15 +62,15 @@ export function ProviderData() {
           </div>
 
           <div className="border-t border-black/10 pt-4">
-            <Link to="#" className="flex items-center gap-4 py-3 text-base text-gray-700 hover:text-got-green">
+            <Link to="/prestador/perfil" className="flex items-center gap-4 py-3 text-base text-gray-700 hover:text-got-green">
               <Globe2 size={22} strokeWidth={1.6} />
               Ver perfil de prestador
             </Link>
-            <Link to="#" className="flex items-center gap-4 py-3 text-base text-gray-700 hover:text-got-green">
+            <Link to="/prestador/configuracoes" className="flex items-center gap-4 py-3 text-base text-gray-700 hover:text-got-green">
               <Settings size={22} strokeWidth={1.6} />
               Configuração
             </Link>
-            <Link to="#" className="flex items-center gap-4 py-3 text-base text-gray-700 hover:text-got-green">
+            <Link to="/prestador/ajuda" className="flex items-center gap-4 py-3 text-base text-gray-700 hover:text-got-green">
               <Star size={22} strokeWidth={1.6} />
               Ajuda
             </Link>

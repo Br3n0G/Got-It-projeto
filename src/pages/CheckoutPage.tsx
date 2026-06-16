@@ -52,12 +52,12 @@ export function CheckoutPage() {
   const handlePagamentoCartao = async (dados: CartaoFormData) => {
     setIsLoading(true);
     try {
-      // Simulação da rota de split/repasses da API
-      await api.post("/transacoes/cartao", {
-        tipo: abaAtiva,
-        ...dados,
-        valorTotal: 150.00 // Exemplo de valor de visita
-      });
+      // Rota de split/repasses da API
+      await api.post("/api/pagamento/split", {
+      cuidador_id_gateway: "ID_DO_PRESTADOR", 
+      valor_total: 150.00,                    
+      token_cartao: dados.numeroCartao        
+    });
       
       navigate("/pagamento/sucesso");
     } catch (error) {
